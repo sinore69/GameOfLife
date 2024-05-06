@@ -47,10 +47,6 @@ func comwaysgame(conn *websocket.Conn, array [16][16]int) {
 	row := len(array)
 	col := len(array[0])
 	newArray:=[16][16]int{}
-	// newArray := make([][]int, row)
-	// for i := range newArray {
-	// 	newArray[i] = make([]int, col)
-	// }
 	for {
 		for i := 0; i < row; i++ {
 			for j := 0; j < col; j++ {
