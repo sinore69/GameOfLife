@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
-let connection: WebSocket;
+import { useEffect, useState, useRef } from "react";
 export default function Home() {
+  const socketref = useRef<WebSocket | null>(null);
+  const [reconnect,setreconnect]=useState(1);
   const [data, setdata] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -20,31 +21,31 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-
-  // connection.onopen = (event) => {
-  //   console.log("connection open")
-  // };
-  const senddata = () => {
-    connection.send(JSON.stringify(data));
-  };
-
   useEffect(() => {
-    try {
-      if (connection.readyState === 1) {
-        connection.onmessage = (event) => {
-          try {
-            const res = JSON.parse(event.data) as number[][];
-            setdata([...res]);
-          } catch (error) {
-            console.log(error);
-          }
-        };
+    socketref.current = new WebSocket("ws://localhost:5000/echo");
+    socketref.current.onopen = () => {
+      console.log("WebSocket is connected");
+    };
+    socketref.current.onmessage = (event) => {
+      try {
+        const res = JSON.parse(event.data) as number[][];
+        setdata([...res]);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    };
+    socketref.current.onclose = () => {
+      console.log("connection closed");
+    };
+  }, [reconnect]);
+  const sendMessage = () => {
+    if (socketref.current && socketref.current.readyState === WebSocket.OPEN) {
+      socketref.current.send(JSON.stringify(data));
+    } else {
+      setreconnect(reconnect+1)
+      console.log("WebSocket connection is not open");
     }
-  }, [data]);
-
+  };
   const changeValue = (rowIndex: number, colIndex: number) => {
     if (data[rowIndex][colIndex] === 1) {
       data[rowIndex][colIndex] = 0;
@@ -71,7 +72,7 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <button onClick={senddata}>click</button>
+      <button onClick={sendMessage}>click</button>
     </div>
   );
 }

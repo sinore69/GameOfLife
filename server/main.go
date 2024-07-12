@@ -29,12 +29,14 @@ func echoHandler(w http.ResponseWriter, r *http.Request) {
 		_, p, err := conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
+			conn.Close()
 			break
 		}
 		var array [16][16]int
 		err = json.Unmarshal(p, &array)
 		if err != nil {
 			log.Println("decoding error")
+			conn.Close()
 			break
 		}
 		comwaysgame(conn, array)
