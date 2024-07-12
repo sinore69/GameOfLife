@@ -2,15 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"time"
+
 	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		// Allow all connections by default
 		return true
 	},
 	ReadBufferSize:  1024,
@@ -18,14 +19,12 @@ var upgrader = websocket.Upgrader{
 }
 
 func echoHandler(w http.ResponseWriter, r *http.Request) {
-	// Upgrade the HTTP connection to a WebSocket connection
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("Error upgrading connection to WebSocket:", err)
 		return
 	}
 	defer conn.Close()
-	// Continuously read messages from the client and echo them back
 	for {
 		_, p, err := conn.ReadMessage()
 		if err != nil {
@@ -46,7 +45,7 @@ func comwaysgame(conn *websocket.Conn, array [16][16]int) {
 	defer conn.Close()
 	row := len(array)
 	col := len(array[0])
-	newArray:=[16][16]int{}
+	newArray := [16][16]int{}
 	for {
 		for i := 0; i < row; i++ {
 			for j := 0; j < col; j++ {
@@ -58,7 +57,7 @@ func comwaysgame(conn *websocket.Conn, array [16][16]int) {
 			log.Println(err)
 			return
 		}
-		time.Sleep((time.Millisecond * 1000))
+		time.Sleep((time.Millisecond * 100))
 	}
 }
 
@@ -97,6 +96,9 @@ func calc(arr [16][16]int, i int, j int) int {
 }
 
 func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "this route works")
+	})
 	http.HandleFunc("/echo", echoHandler)
 	log.Println("Server started at :5000")
 	err := http.ListenAndServe(":5000", nil)

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+let connection:WebSocket
 export default function Home() {
   const [data, setdata] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -20,10 +21,9 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const connection=new WebSocket("ws://127.0.0.1:5000/echo")
-  connection.onopen = (event) => {
-    console.log("connection open")
-  };  
+  // connection.onopen = (event) => {
+  //   console.log("connection open")
+  // };  
   const senddata=()=>{
     connection.send(JSON.stringify(data));
   }
