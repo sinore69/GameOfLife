@@ -29,15 +29,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (connection.readyState === 1) {
-      connection.onmessage = (event) => {
-        try {
-          const res = JSON.parse(event.data) as number[][];
-          setdata([...res]);
-        } catch (error) {
-          console.log(error);
-        }
-      };
+    try {
+      if (connection.readyState === 1) {
+        connection.onmessage = (event) => {
+          try {
+            const res = JSON.parse(event.data) as number[][];
+            setdata([...res]);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, [data]);
 
