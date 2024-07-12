@@ -3,6 +3,9 @@ import { useEffect, useState, useRef } from "react";
 export default function Home() {
   const socketref = useRef<WebSocket | null>(null);
   const [reconnect,setreconnect]=useState(1);
+  const port=process.env.NEXT_PUBLIC_PORT as string
+  const ip=process.env.NEXT_PUBLIC_IP as string
+  const url=`ws://${ip}:${port}/echo`
   const [data, setdata] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -22,7 +25,7 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
   useEffect(() => {
-    socketref.current = new WebSocket("ws://localhost:5000/echo");
+    socketref.current = new WebSocket(url);
     socketref.current.onopen = () => {
       console.log("WebSocket is connected");
     };
@@ -35,6 +38,7 @@ export default function Home() {
       }
     };
     socketref.current.onclose = () => {
+      console.log(url)
       console.log("connection closed");
     };
   }, [reconnect]);
@@ -43,6 +47,7 @@ export default function Home() {
       socketref.current.send(JSON.stringify(data));
     } else {
       setreconnect(reconnect+1)
+      console.log(process.env.POR)
       console.log("WebSocket connection is not open");
     }
   };
@@ -72,7 +77,7 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <button onClick={sendMessage}>click</button>
+      <button onClick={sendMessage}>click{process.env.POR}</button>
     </div>
   );
 }
