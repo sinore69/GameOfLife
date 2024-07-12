@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-let connection:WebSocket
+let connection: WebSocket;
 export default function Home() {
   const [data, setdata] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -23,22 +23,24 @@ export default function Home() {
 
   // connection.onopen = (event) => {
   //   console.log("connection open")
-  // };  
-  const senddata=()=>{
+  // };
+  const senddata = () => {
     connection.send(JSON.stringify(data));
-  }
+  };
 
-  useEffect(()=>{
-    connection.onmessage = (event) => {
-      try {
-        const res=JSON.parse(event.data) as number[][]
-        setdata([...res])
-      } catch (error) {
-        console.log(error)
-      }
-    };
-  },[data])
-  
+  useEffect(() => {
+    if (connection.readyState === 1) {
+      connection.onmessage = (event) => {
+        try {
+          const res = JSON.parse(event.data) as number[][];
+          setdata([...res]);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }, [data]);
+
   const changeValue = (rowIndex: number, colIndex: number) => {
     if (data[rowIndex][colIndex] === 1) {
       data[rowIndex][colIndex] = 0;
@@ -56,9 +58,9 @@ export default function Home() {
             {row.map((item, colIndex) => (
               <div
                 key={colIndex}
-                className={`flex flex-col h-6 w-6 border ${(item===0)?"border-black":"border-white"} ${
-                  (item === 0) ? "bg-white" : "bg-black"
-                }`}
+                className={`flex flex-col h-6 w-6 border ${
+                  item === 0 ? "border-black" : "border-white"
+                } ${item === 0 ? "bg-white" : "bg-black"}`}
                 onClick={() => changeValue(rowIndex, colIndex)}
               ></div>
             ))}
@@ -68,5 +70,4 @@ export default function Home() {
       <button onClick={senddata}>click</button>
     </div>
   );
-
 }
