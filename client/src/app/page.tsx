@@ -5,7 +5,7 @@ export default function Home() {
   const [reconnect,setreconnect]=useState(1);
   const port=process.env.NEXT_PUBLIC_PORT as string
   const ip=process.env.NEXT_PUBLIC_IP as string
-  const url=`ws://${ip}:${port}/echo`
+  const url=`wss://${ip}:${port}/echo`
   const [data, setdata] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
