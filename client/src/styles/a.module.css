@@ -1,0 +1,77 @@
+/* Container */
+.container {
+  min-height: 100vh;
+  background-color: #f7fafc; /* bg-gray-100 */
+  padding: 1.5rem;
+}
+
+/* Title */
+.title {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Subtitle */
+.subtitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #718096; /* text-gray-600 */
+}
+
+/* Section List */
+.sectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem; /* space-y-32 */
+  margin-bottom: 24rem; /* mb-96 */
+}
+
+/* Section */
+.section {
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* Section Title */
+.sectionTitle {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #3182ce; /* text-blue-600 */
+}
+
+/* Section Content */
+.sectionContent {
+  color: #4a5568; /* text-gray-700 */
+}
+
+/* State Box */
+.stateBox {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #edf2f7; /* bg-gray-200 */
+  border-radius: 0.5rem;
+}
+
+/* State Text */
+.stateText {
+  font-size: 0.875rem; /* text-sm */
+  color: #718096; /* text-gray-600 */
+}
+
+/* Fade animations */
+.fadeVisible {
+  opacity: 1;
+}
+
+.fadeHidden {
+  opacity: 0;
+}
+
+.fadeTransition {
+  transition: opacity 1s;
+}
